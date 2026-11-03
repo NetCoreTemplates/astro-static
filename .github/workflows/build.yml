@@ -63,7 +63,7 @@ jobs:
           cache: true
 
       - name: check (format, lint, type check)
-        run: vp check
+        run: npm run check # astro sync generates the astro:content types, then vp check
         working-directory: ./MyApp.Client
 
       - name: test
