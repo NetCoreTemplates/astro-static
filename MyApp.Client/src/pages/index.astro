@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content'
+import { AstroLogo, AutoUis, ShellCommand, TailwindLogo, TypeScriptLogo, ViteLogo } from 'react-net-templates'
+import FormattedDate from '../components/FormattedDate.astro'
+import { AuthButtons, HelloApi } from '../components/islands'
+import Layout from '../layouts/Layout.astro'
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3)
+---
+
+<Layout>
+	<div class="max-w-screen-xl mx-auto px-8 py-24 flex flex-col items-center justify-center">
+		<div class="flex gap-8 mb-8 items-end">
+			<a href="https://astro.build" target="_blank" rel="noreferrer">
+				<AstroLogo className="h-32 transition-all duration-300 hover:drop-shadow-[0_0_2em_#bc52eeaa]" />
+			</a>
+			<a href="https://tailwindcss.com" target="_blank" rel="noreferrer">
+				<TailwindLogo className="h-36 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa]" />
+			</a>
+			<a href="https://www.typescriptlang.org" target="_blank" rel="noreferrer">
+				<TypeScriptLogo className="mb-2 h-28 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa]" />
+			</a>
+			<a href="https://vite.dev" target="_blank" rel="noreferrer">
+				<ViteLogo className="h-36 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa]" />
+			</a>
+		</div>
+		<h1 class="text-6xl md:text-7xl font-bold mt-4 mb-8 text-center">Astro .NET</h1>
+
+		<!-- React components without a client:* directive (e.g. ShellCommand) are rendered to static HTML at build time, with no JS -->
+		<ShellCommand client:visible className="my-4">npx create-net astro-static MyProject</ShellCommand>
+
+		<!-- Interactive React islands, hydrated in the browser -->
+		<HelloApi client:load value="Astro" className="text-center" />
+
+		<div class="mb-8">
+			<AuthButtons client:load />
+		</div>
+
+		{
+			posts.length > 0 && (
+				<section class="mt-16 w-full max-w-4xl">
+					<h2 class="text-2xl font-bold mb-6 text-center">
+						<a href="/blog" class="hover:text-indigo-600 dark:hover:text-indigo-400">
+							Latest Posts
+						</a>
+					</h2>
+					<ul class="grid gap-6 sm:grid-cols-3">
+						{posts.map((post) => (
+							<li>
+								<a
+									href={`/blog/${post.id}`}
+									class="block h-full rounded-xl border border-gray-200 dark:border-gray-800 p-5 hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors"
+								>
+									<h3 class="font-semibold">{post.data.title}</h3>
+									<p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+									<p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{post.data.description}</p>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+
+		<!-- Interactive carousel, hydrated when scrolled into view -->
+		<AutoUis client:visible className="mt-32 w-full" />
+	</div>
+</Layout>

@@ -1,0 +1,9 @@
+---
+import { Profile } from '../components/islands'
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="Profile">
+	<!-- client:only: the profile depends on the signed-in user, so it's only rendered in the browser -->
+	<Profile client:only="react" />
+</Layout>

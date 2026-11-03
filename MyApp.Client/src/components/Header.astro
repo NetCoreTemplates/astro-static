@@ -1,0 +1,25 @@
+---
+import { DarkModeToggle, UserMenu } from './islands'
+import { SITE_TITLE } from '../consts'
+import HeaderLink from './HeaderLink.astro'
+---
+
+<header class="sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur">
+	<!-- 3 column grid keeps the links centered regardless of the widths on either side -->
+	<nav class="max-w-6xl mx-auto h-16 px-4 sm:px-6 grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+		<a href="/" class="flex items-center gap-2.5 justify-self-start text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+			<img src="/assets/img/logo.svg" alt="" class="h-7 w-7 dark:invert" />
+			<span class="hidden sm:inline">{SITE_TITLE}</span>
+		</a>
+		<div class="flex h-full items-stretch gap-1 sm:gap-4">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/blog">Blog</HeaderLink>
+			<HeaderLink href="/about">About</HeaderLink>
+		</div>
+		<div class="flex items-center gap-2 sm:gap-4 justify-self-end">
+			<!-- React islands: hydrated in the browser, they share the signed-in user -->
+			<span class="flex h-6 w-11 items-center"><DarkModeToggle client:only="react" /></span>
+			<UserMenu client:load />
+		</div>
+	</nav>
+</header>
